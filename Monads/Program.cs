@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Monads {
     internal static class Program {
@@ -11,6 +13,15 @@ namespace Monads {
                 select text + number;
 
             Console.WriteLine(lazyConcatenation.Value);
+
+            var deferedNumber = 600.ToDefered();
+            var deferedNumber2 = 300.ToDefered();
+
+            var deferedCalculation = from num1 in deferedNumber
+                from num2 in deferedNumber2
+                select num2 + num1;
+
+            Console.WriteLine(deferedCalculation.Invoke());
         }
     }
 }
