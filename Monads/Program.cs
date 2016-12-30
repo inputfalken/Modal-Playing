@@ -22,6 +22,13 @@ namespace Monads {
                 select num2 + num1;
 
             Console.WriteLine(deferedCalculation.Invoke());
+
+
+            const string helloTxt = null;
+            var foo = DateTime.Now.ToMaybe()
+                .Select(time => DateTime.Now.AddYears(1))
+                .SelectMany(time => helloTxt.ToMaybe(), (time, s) => time + s);
+            Console.WriteLine(foo);
         }
     }
 }

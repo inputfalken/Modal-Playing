@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Defered.cs" />
     <Compile Include="Lazy.cs" />
+    <Compile Include="Maybe.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
