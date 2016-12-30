@@ -1,17 +1,23 @@
 ﻿using System;
 
 namespace Monads {
-    public class Maybe<T> {
+    public struct Maybe<T> {
         public static Maybe<T> Nothing => new Maybe<T>();
         public bool HasValue { get; }
-        public T Value { get; }
+        private readonly T _value;
 
-        public Maybe() {
-            HasValue = false;
+        public T Value {
+            get {
+                if (HasValue) {
+                    return _value;
+                }
+                throw new Exception("Value is Nothing");
+            }
         }
 
+
         public Maybe(T value) {
-            Value = value;
+            _value = value;
             HasValue = value != null;
         }
 

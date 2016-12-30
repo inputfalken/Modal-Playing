@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using System.Threading;
+using System.Linq;
 
 namespace Monads {
     internal static class Program {
@@ -23,12 +22,31 @@ namespace Monads {
 
             Console.WriteLine(deferedCalculation.Invoke());
 
+            var sucesses = new[] {
+                    "John", "John Doe1",
+                    "John1 Doe", "john Doe",
+                    "John doe", "John Doe",
+                    "John  Doe", "John 1 Doe",
+                    "Johna Doe Doe", null
+                }
+                .Select(ValidateName)
+                .Count(maybe => maybe.SelectMany(SaveInDb).HasValue);
+            Console.WriteLine(sucesses);
+        }
 
-            const string helloTxt = null;
-            var foo = DateTime.Now.ToMaybe()
-                .Select(time => DateTime.Now.AddYears(1))
-                .SelectMany(time => helloTxt.ToMaybe(), (time, s) => time + s);
-            Console.WriteLine(foo);
+        public static int Counter;
+
+        public static Maybe<string> SaveInDb(string str) => ++Counter % 3 == 0
+            ? Maybe<string>.Nothing
+            : new Maybe<string>(str);
+
+        public static Maybe<string> ValidateName(string name) {
+            if (name == null) return Maybe<string>.Nothing;
+            var strings = name.Trim().Split().Where(s => !string.IsNullOrEmpty(s)).ToArray();
+            if (strings.Length < 2) return Maybe<string>.Nothing;
+            return strings.All(s => s.All(char.IsLetter) && char.IsUpper(s.First()))
+                ? new Maybe<string>(strings.Aggregate((s, s1) => $"{s} {s1}"))
+                : Maybe<string>.Nothing;
         }
     }
 }
