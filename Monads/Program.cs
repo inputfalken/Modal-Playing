@@ -22,6 +22,7 @@ namespace Monads {
 
             Console.WriteLine(deferedCalculation.Invoke());
 
+
             var sucesses = new[] {
                     "John", "John Doe1",
                     "John1 Doe", "john Doe",
@@ -31,7 +32,19 @@ namespace Monads {
                 }
                 .Select(ValidateName)
                 .Count(maybe => maybe.SelectMany(SaveInDb).HasValue);
-            Console.WriteLine(sucesses);
+
+            var txt = "Lorem ipsum dolor.".ToMaybe();
+
+            var sentence = txt
+                .SelectMany(s => char.IsUpper(s.First()) ? s.ToMaybe() : Maybe<string>.Nothing)
+                .SelectMany(s => s.Last() == '.' ? s.ToMaybe() : Maybe<string>.Nothing)
+                .SelectMany(s => s.Split(' ').Length > 1 ? s.ToMaybe() : new Maybe<string>());
+
+            var sentenceImproved = txt
+                .Where(s => char.IsUpper(s.First()))
+                .Where(s => s.Last() == '.')
+                .Where(s => s.Split(' ').Length > 1);
+
         }
 
         public static int Counter;

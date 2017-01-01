@@ -40,5 +40,10 @@ namespace Monads {
             Func<T, T2, TResult> func2) => maybe.HasValue
             ? SelectMany(func(maybe.Value), x => new Maybe<TResult>(func2(maybe.Value, x)))
             : Maybe<TResult>.Nothing;
+
+        public static Maybe<TResult> Where<TResult>(this Maybe<TResult> maybe, Func<TResult, bool> predicate)
+            => maybe.HasValue
+                ? SelectMany(maybe, x => predicate(x) ? maybe : Maybe<TResult>.Nothing)
+                : Maybe<TResult>.Nothing;
     }
 }
